@@ -1,4 +1,4 @@
-MODNAME := thingworx-v2
+MODNAME := thingworxV2
 TEMPDIR := /tmp/module
 IMGDIR  ?= .
 

@@ -35,7 +35,7 @@
 #define MODULE_TITLE        "Thingworx Client"
 
 // jmeno modulu
-#define MODULE_NAME         "thingworx"
+#define MODULE_NAME         "thingworxV2"
 
 // prefix parametru modulu
 #define MODULE_PREFIX       "MOD_THINGWORX_"

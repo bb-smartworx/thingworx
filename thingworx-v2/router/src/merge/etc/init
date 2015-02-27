@@ -2,13 +2,13 @@
 
 case "$1" in
   start)
-	. /opt/thingworx/etc/settings
+	. /opt/thingworxV2/etc/settings
 	echo -n "Starting module thingworx: "
 	if [ "$MOD_THINGWORX_ENABLED" != "1" ]; then
 	    echo "skipped"
 	    exit 0
 	fi
-	/opt/thingworx/bin/thingworxd &
+	/opt/thingworxV2/bin/thingworxd &
 	RETVAL=$?
 	if [ $RETVAL = 0 ]; then echo "done"; else echo "failed"; fi
 	exit $RETVAL
@@ -32,7 +32,7 @@ case "$1" in
 	exit $RETVAL
 	;;
   defaults)
-	cp /opt/thingworx/etc/defaults /opt/thingworx/etc/settings 2> /dev/null
+	cp /opt/thingworxV2/etc/defaults /opt/thingworxV2/etc/settings 2> /dev/null
 	;;
   *)
 	echo "Usage: $0 {start|stop|restart|status|defaults}"
