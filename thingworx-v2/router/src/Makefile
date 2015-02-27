@@ -1,0 +1,33 @@
+MODNAME := thingworx-v2
+TEMPDIR := /tmp/module
+IMGDIR  ?= .
+
+# v2: arm-926ejs-linux-gnueabi
+ifeq ($(PLATFORM), )
+PLATFORM= arm-926ejs-linux-gnueabi
+endif
+
+# set the build type, debug or release
+ifeq ($(BUILD), )
+BUILD=release
+endif
+
+export DESTDIR := $(TEMPDIR)/$(MODNAME)
+
+all:
+	# build timesys libs
+	cp -r arm-926ejs-linux-gnueabi/ ../../../tw-c-sdk/build/platforms/
+	cp source/twLinux.h ../../../tw-c-sdk/src/porting/
+	make -C ../../../tw-c-sdk/build PLATFORM=$(PLATFORM) BUILD=$(BUILD)
+	# build application
+	rm -rf $(DESTDIR)
+	mkdir -p $(DESTDIR)
+	cp -r merge/* $(DESTDIR)
+	make -C source all install PLATFORM=$(PLATFORM) BUILD=$(BUILD)
+	tar -C $(TEMPDIR) -czf $(IMGDIR)/$(MODNAME).tgz $(MODNAME)
+	rm -rf $(DESTDIR)
+
+clean:
+	make -C source clean
+	make -C ../../../tw-c-sdk/build clean
+	rm -f $(IMGDIR)/$(MODNAME).tgz

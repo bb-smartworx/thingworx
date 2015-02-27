@@ -1,0 +1,40 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+	. /opt/thingworx/etc/settings
+	echo -n "Starting module thingworx: "
+	if [ "$MOD_THINGWORX_ENABLED" != "1" ]; then
+	    echo "skipped"
+	    exit 0
+	fi
+	/opt/thingworx/bin/thingworxd &
+	RETVAL=$?
+	if [ $RETVAL = 0 ]; then echo "done"; else echo "failed"; fi
+	exit $RETVAL
+	;;
+  stop)
+	echo -n "Stopping module thingworx: "
+	killall thingworxd 2> /dev/null
+	RETVAL=$?
+	if [ $RETVAL = 0 ]; then echo "done"; else echo "failed"; fi
+	exit $RETVAL
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  status)
+	echo -n "Module thingworx is "
+	killall -0 thingworxd 2> /dev/null
+	RETVAL=$?
+	if [ $RETVAL = 0 ]; then echo "running"; else echo "stopped"; fi
+	exit $RETVAL
+	;;
+  defaults)
+	cp /opt/thingworx/etc/defaults /opt/thingworx/etc/settings 2> /dev/null
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|status|defaults}"
+	exit 1
+esac
