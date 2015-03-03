@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Entities build="445" majorVersion="5" minorVersion="4" revision="0" schemaVersion="796"><ScriptFunctionLibraries/><Logs/><Users/><ThingTemplates/><DirectoryServices/><DataShapes/><Organizations/><Widgets/><ApplicationKeys><ApplicationKey clientName="" description="" documentationContent="" homeMashup="" ipWhitelist="" keyId="90e438fd-e8ab-4bee-b4a5-5aec440e8086" lastModifiedDate="2015-02-27T12:10:15.706Z" name="v3Key" tags="Applications:V3" userNameReference="Administrator"><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTables/><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated, tags : updated, userNameReference : updated&#10;" timestamp="2015-02-27T12:10:15.521Z" user="Administrator"/></ConfigurationChanges></ApplicationKey></ApplicationKeys><ExtensionPackages/><Groups/><Dashboards/><MediaEntities/><Networks/><Mashups><Mashup aspect.isResponsive="true" aspect.mashupType="mashup" columns="0.0" description="" documentationContent="&lt;p&gt;&lt;br&gt;&lt;/p&gt;" homeMashup="" lastModifiedDate="2015-03-03T10:21:19.293Z" name="v3Mashup" rows="0.0" tags="Applications:V3"><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTables/><ParameterDefinitions/><Things><Thing>v3Thing</Thing></Things><ThingShapes/><ThingTemplates/><mashupContent><![CDATA[{
+  "Data" : {
+    "UserExtensions" : {
+      "Services" : [ {
+        "Characteristic" : "Services",
+        "Name" : "GetCurrentUserExtensionProperties",
+        "Parameters" : { },
+        "Target" : "GetCurrentUserExtensionProperties",
+        "APIMethod" : "post",
+        "Id" : "UserExtensionInterface",
+        "RefreshInterval" : 0
+      } ],
+      "EntityType" : "UserExtensions",
+      "Id" : "UserExtensions",
+      "EntityName" : "",
+      "DataName" : "UserExtensions"
+    },
+    "Session" : {
+      "Services" : [ {
+        "Characteristic" : "Services",
+        "Name" : "GetGlobalSessionValues",
+        "Parameters" : { },
+        "Target" : "GetGlobalSessionValues",
+        "APIMethod" : "post",
+        "Id" : "SessionInterface",
+        "RefreshInterval" : 0
+      } ],
+      "EntityType" : "Session",
+      "Id" : "session",
+      "EntityName" : "",
+      "DataName" : "Session"
+    },
+    "Things_v3Thing" : {
+      "Services" : [ {
+        "Characteristic" : "Services",
+        "Name" : "GetPropertyValues",
+        "Parameters" : { },
+        "Target" : "GetPropertyValues",
+        "APIMethod" : "post",
+        "Id" : "dca4fe1b-f27c-4dba-834f-5b1fe533a30c",
+        "RefreshInterval" : 0
+      } ],
+      "EntityType" : "Things",
+      "EntityName" : "v3Thing",
+      "Id" : "4700f01b-1d73-4408-8137-2e34a8d8548a",
+      "DataName" : "Things_v3Thing"
+    }
+  },
+  "DataBindings" : [ {
+    "PropertyMaps" : [ {
+      "TargetPropertyType" : "property",
+      "TargetPropertyBaseType" : "NUMBER",
+      "TargetProperty" : "Data",
+      "SourcePropertyType" : "Field",
+      "SourceProperty" : "Voltage",
+      "SourcePropertyBaseType" : "NUMBER"
+    } ],
+    "TargetSection" : "",
+    "SourceSection" : "Things_v3Thing",
+    "TargetArea" : "UI",
+    "SourceArea" : "Data",
+    "Id" : "0a9c0801-fe4c-4ba8-b39f-4b28151cd4cf",
+    "SourceDetails" : "AllData",
+    "SourceId" : "GetPropertyValues",
+    "TargetId" : "LEDDisplay-5"
+  }, {
+    "PropertyMaps" : [ {
+      "TargetPropertyType" : "property",
+      "TargetPropertyBaseType" : "NUMBER",
+      "TargetProperty" : "Data",
+      "SourcePropertyType" : "Field",
+      "SourceProperty" : "Temperature",
+      "SourcePropertyBaseType" : "NUMBER"
+    } ],
+    "TargetSection" : "",
+    "SourceSection" : "Things_v3Thing",
+    "TargetArea" : "UI",
+    "SourceArea" : "Data",
+    "Id" : "d6c13c30-0481-4cd4-9938-59bf188706a8",
+    "SourceDetails" : "AllData",
+    "SourceId" : "GetPropertyValues",
+    "TargetId" : "LEDDisplay-4"
+  }, {
+    "PropertyMaps" : [ {
+      "TargetPropertyType" : "property",
+      "TargetPropertyBaseType" : "NUMBER",
+      "TargetProperty" : "Data",
+      "SourcePropertyType" : "Field",
+      "SourceProperty" : "LanTx",
+      "SourcePropertyBaseType" : "NUMBER"
+    } ],
+    "TargetSection" : "",
+    "SourceSection" : "Things_v3Thing",
+    "TargetArea" : "UI",
+    "SourceArea" : "Data",
+    "Id" : "91fea2b5-065e-4d55-9e5a-8d701c7227e9",
+    "SourceDetails" : "AllData",
+    "SourceId" : "GetPropertyValues",
+    "TargetId" : "LEDDisplay-2"
+  }, {
+    "PropertyMaps" : [ {
+      "TargetPropertyType" : "property",
+      "TargetPropertyBaseType" : "NUMBER",
+      "TargetProperty" : "Data",
+      "SourcePropertyType" : "Field",
+      "SourceProperty" : "LanRx",
+      "SourcePropertyBaseType" : "NUMBER"
+    } ],
+    "TargetSection" : "",
+    "SourceSection" : "Things_v3Thing",
+    "TargetArea" : "UI",
+    "SourceArea" : "Data",
+    "Id" : "916d6c6f-9573-4305-b22b-6e5b45973d92",
+    "SourceDetails" : "AllData",
+    "SourceId" : "GetPropertyValues",
+    "TargetId" : "LEDDisplay-3"
+  } ],
+  "mashupType" : "mashup",
+  "RunTimePermissions" : { },
+  "Events" : [ {
+    "EventHandlerArea" : "Data",
+    "EventTriggerId" : "mashup-root",
+    "EventTriggerSection" : "",
+    "Id" : "14d77368-4c4a-490b-8308-f2ee65146414",
+    "EventTriggerEvent" : "Loaded",
+    "EventTriggerArea" : "Mashup",
+    "EventHandlerId" : "Things_v3Thing",
+    "EventHandlerService" : "GetPropertyValues"
+  }, {
+    "EventHandlerArea" : "Data",
+    "EventTriggerId" : "AutoRefresh-6",
+    "EventTriggerSection" : "",
+    "Id" : "8fd4458b-fb80-4976-949a-5aa84a163aab",
+    "EventTriggerEvent" : "Refresh",
+    "EventTriggerArea" : "UI",
+    "EventHandlerId" : "Things_v3Thing",
+    "EventHandlerService" : "GetPropertyValues"
+  } ],
+  "UI" : {
+    "Widgets" : [ {
+      "Widgets" : [ {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 0,
+          "__TypeDisplayName" : "LED Display",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "leddisplay",
+          "Area" : "UI",
+          "Z-index" : 10,
+          "Digits" : 5,
+          "Height" : 56,
+          "DisplayName" : "LEDDisplay-2",
+          "LEDStyle" : "DefaultLEDStyle",
+          "Left" : 0,
+          "LEDSize" : "normal",
+          "ZeroFill" : false,
+          "Id" : "LEDDisplay-2",
+          "Width" : 154,
+          "ShowDataLoading" : true,
+          "Decimals" : 2
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 0,
+          "__TypeDisplayName" : "LED Display",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "leddisplay",
+          "Area" : "UI",
+          "Z-index" : 10,
+          "Digits" : 5,
+          "Height" : 56,
+          "DisplayName" : "LEDDisplay-3",
+          "LEDStyle" : "DefaultLEDStyle",
+          "Left" : 170,
+          "LEDSize" : "normal",
+          "ZeroFill" : false,
+          "Id" : "LEDDisplay-3",
+          "Width" : 154,
+          "ShowDataLoading" : true,
+          "Decimals" : 2
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 0,
+          "__TypeDisplayName" : "LED Display",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "leddisplay",
+          "Area" : "UI",
+          "Z-index" : 10,
+          "Digits" : 5,
+          "Height" : 56,
+          "DisplayName" : "LEDDisplay-4",
+          "LEDStyle" : "DefaultLEDStyle",
+          "Left" : 340,
+          "LEDSize" : "normal",
+          "ZeroFill" : false,
+          "Id" : "LEDDisplay-4",
+          "Width" : 154,
+          "ShowDataLoading" : true,
+          "Decimals" : 2
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 0,
+          "__TypeDisplayName" : "LED Display",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "leddisplay",
+          "Area" : "UI",
+          "Z-index" : 10,
+          "Digits" : 5,
+          "Height" : 56,
+          "DisplayName" : "LEDDisplay-5",
+          "LEDStyle" : "DefaultLEDStyle",
+          "Left" : 510,
+          "LEDSize" : "normal",
+          "ZeroFill" : false,
+          "Id" : "LEDDisplay-5",
+          "Width" : 154,
+          "ShowDataLoading" : true,
+          "Decimals" : 2
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "ShowControls" : true,
+          "RefreshToggleStyleOff" : "DefaultAutoRefreshToggleOffStyle",
+          "FocusStyle" : "DefaultButtonFocusStyle",
+          "__TypeDisplayName" : "Auto Refresh",
+          "ActiveStyle" : "DefaultButtonActiveStyle",
+          "Visible" : true,
+          "Type" : "autorefresh",
+          "Area" : "UI",
+          "Style" : "DefaultButtonStyle",
+          "Z-index" : 10,
+          "RefreshInterval" : 30,
+          "AutoRefresh" : true,
+          "HoverStyle" : "DefaultButtonHoverStyle",
+          "RefreshToggleLabelOff" : "Off",
+          "Width" : 180,
+          "RefreshToggleSliderStyle" : "DefaultAutoRefreshToggleSliderStyle",
+          "RefreshToggleStyle" : "DefaultAutoRefreshToggleStyle",
+          "RefreshToggleLabel" : "On",
+          "Top" : 105,
+          "RefreshNowTabSequence" : 0,
+          "AutoRefreshTabSequence" : 0,
+          "ResponsiveLayout" : false,
+          "Height" : 28,
+          "DisplayName" : "AutoRefresh-6",
+          "Left" : 230,
+          "IconAlignment" : "left",
+          "Id" : "AutoRefresh-6",
+          "Label" : "Refresh Now",
+          "ShowDataLoading" : true
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 60,
+          "__TypeDisplayName" : "Label",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "label",
+          "Area" : "UI",
+          "Style" : "DefaultLabelStyle",
+          "Height" : 22,
+          "Z-index" : 10,
+          "DisplayName" : "Label-7",
+          "Left" : 50,
+          "Text" : "LAN Tx",
+          "Id" : "Label-7",
+          "Alignment" : "left",
+          "Width" : 75,
+          "ShowDataLoading" : true
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 60,
+          "__TypeDisplayName" : "Label",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "label",
+          "Area" : "UI",
+          "Style" : "DefaultLabelStyle",
+          "Height" : 22,
+          "Z-index" : 10,
+          "DisplayName" : "Label-8",
+          "Left" : 220,
+          "Text" : "LAN Rx",
+          "Id" : "Label-8",
+          "Alignment" : "left",
+          "Width" : 75,
+          "ShowDataLoading" : true
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 60,
+          "__TypeDisplayName" : "Label",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "label",
+          "Area" : "UI",
+          "Style" : "DefaultLabelStyle",
+          "Height" : 22,
+          "Z-index" : 10,
+          "DisplayName" : "Label-9",
+          "Left" : 385,
+          "Text" : "Temperature",
+          "Id" : "Label-9",
+          "Alignment" : "left",
+          "Width" : 75,
+          "ShowDataLoading" : true
+        }
+      }, {
+        "Widgets" : [ ],
+        "Properties" : {
+          "Top" : 60,
+          "__TypeDisplayName" : "Label",
+          "Visible" : true,
+          "ResponsiveLayout" : false,
+          "Type" : "label",
+          "Area" : "UI",
+          "Style" : "DefaultLabelStyle",
+          "Height" : 22,
+          "Z-index" : 10,
+          "DisplayName" : "Label-10",
+          "Left" : 555,
+          "Text" : "Voltage",
+          "Id" : "Label-10",
+          "Alignment" : "left",
+          "Width" : 75,
+          "ShowDataLoading" : true
+        }
+      } ],
+      "Properties" : {
+        "Top" : 220,
+        "__TypeDisplayName" : "Panel",
+        "VerticalAnchor" : "top",
+        "Visible" : true,
+        "ResponsiveLayout" : true,
+        "Type" : "panel",
+        "Area" : "UI",
+        "Style" : "DefaultPanelStyle",
+        "Z-index" : 10,
+        "Height" : 200,
+        "DisplayName" : "Panel-1",
+        "Left" : 315,
+        "HorizontalAnchor" : "left",
+        "Id" : "Panel-1",
+        "Width" : 300,
+        "ShowDataLoading" : true
+      }
+    } ],
+    "Properties" : {
+      "Columns" : 0,
+      "Rows" : 0,
+      "__TypeDisplayName" : "Mashup",
+      "Visible" : true,
+      "Type" : "mashup",
+      "Area" : "Mashup",
+      "Style" : "DefaultMashupStyle",
+      "Z-index" : 10,
+      "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
+      "BGImageRepeat" : "no-repeat",
+      "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
+      "Width" : 1024,
+      "id_index" : 10,
+      "Top" : 0,
+      "TitleBarStyle" : "DefaultTitleBarStyle",
+      "ResponsiveLayout" : true,
+      "IgnoreWarningsInViewMashup" : false,
+      "MinHeight" : 0,
+      "Height" : 618,
+      "MinWidth" : 0,
+      "DisplayName" : "Mashup",
+      "Left" : 0,
+      "Title" : "",
+      "IsPrintLayout" : false,
+      "TitleBar" : false,
+      "supportsAutoResize" : true,
+      "TitleBarText" : "Gadget Title Here",
+      "BGImageSize" : "auto",
+      "Id" : "mashup-root",
+      "ShowDataLoading" : true
+    }
+  },
+  "DesignTimePermissions" : { }
+}]]></mashupContent><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated, tags : updated&#10;documentation : updated&#10;" timestamp="2015-03-03T10:21:19.292Z" user="Administrator"/></ConfigurationChanges></Mashup></Mashups><Menus/><StateDefinitions/><Things><Thing description="" documentationContent="&lt;p&gt;&lt;br&gt;&lt;/p&gt;" effectiveThingPackage="RemoteThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2015-03-03T10:01:49.346Z" name="v3Thing" published="false" tags="Applications:V3" thingTemplate="RemoteThing" valueStream=""><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTables/><ThingShape><PropertyDefinitions><PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="Voltage" ordinal="1"/><PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="LanRx" ordinal="4"/><PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="Temperature" ordinal="2"/><PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="LanTx" ordinal="3"/></PropertyDefinitions><ServiceDefinitions/><EventDefinitions/><ServiceMappings/><ServiceImplementations/><Subscriptions/></ThingShape><PropertyBindings/><RemotePropertyBindings><RemotePropertyBinding foldType="NONE" name="Voltage" pushThreshold="0.0" pushType="ALWAYS" sourceName="Voltage" timeout="0"/><RemotePropertyBinding foldType="NONE" name="LanRx" pushThreshold="0.0" pushType="ALWAYS" sourceName="LanRx" timeout="0"/><RemotePropertyBinding foldType="NONE" name="Temperature" pushThreshold="0.0" pushType="ALWAYS" sourceName="Temperature" timeout="0"/><RemotePropertyBinding foldType="NONE" name="LanTx" pushThreshold="0.0" pushType="ALWAYS" sourceName="LanTx" timeout="0"/></RemotePropertyBindings><RemoteServiceBindings/><RemoteEventBindings/><AlertConfigurations/><ImplementedShapes/><ThingProperties/><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated, tags : updated, thingTemplate : updated&#10;documentation : updated&#10;" timestamp="2015-03-02T15:36:28.868Z" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="properties : Voltage : added remote property from browse, Temperature : added remote property from browse, LanTx : added remote property from browse, LanRx : added remote property from browse&#10;" timestamp="2015-03-03T10:01:49.346Z" user="Administrator"/></ConfigurationChanges></Thing></Things><Subsystems/><ThingShapes/><ModelTags/><Authenticators/><LocalizationTables/><ThingPackages/><DataTags/><StyleDefinitions/><Resources/></Entities>
