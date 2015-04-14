@@ -37,12 +37,17 @@
 #include "twLogger.h"
 #include "twApi.h"
 
+#include "com.h"
 #include "gpio.h"
 #include "module.h"
 #include "module_cfg.h"
 
+#include <fcntl.h> 
 #include <stdio.h>
 #include <string.h>
+#include <sys/select.h>
+#include <termios.h>
+#include <unistd.h>
 
 /* Name of our thing */
 char * thingName;
@@ -58,12 +63,58 @@ struct  {
 	double LanRx;
 	double Temperature;
 	double Voltage;
-	
+	char * SerialStr;
+	double SerialTemp;
+	double GpioIn;
+
 } properties;
 
 /*****************
 Helper Functions
 *****************/
+char * read_serial(int fd)
+{
+	static char           buffer[8192];
+	char                  temp[128];
+	struct timeval        tv;
+	fd_set                rfds;
+	int                   cnt, len;
+
+	// Might need to change this
+	int timeout = 1;
+
+	// Received response
+	memset(buffer, 0, sizeof(buffer));
+	FD_ZERO(&rfds);
+	FD_SET(fd, &rfds);
+	tv.tv_sec = timeout; tv.tv_usec = 0;
+	if (select(fd + 1, &rfds, NULL, NULL, &tv) > 0) {
+		cnt = 0;
+		do
+		{
+			if (cnt < (int)(sizeof(buffer) - 1)) 
+			{
+			len = read(fd, buffer + cnt, sizeof(buffer) - cnt - 1);
+			} else {
+				len = read(fd, temp, sizeof(temp));
+      		}
+      		if (len > 0) {
+        		cnt += len;
+      		}
+      		if (len <= 0 || cnt >= 65536) {
+        		break;
+      		}
+      		if (len <= 2) {
+        		tv.tv_sec = timeout; tv.tv_usec = 0;
+      		} else {
+        		tv.tv_sec = 0; tv.tv_usec = 200000;
+      		}
+    	} while (select(fd + 1, &rfds, NULL, NULL, &tv) > 0);
+  	}
+
+  	return buffer;
+}
+
 void sendPropertyUpdate() {
 
 	/* Create the property list */
@@ -75,6 +126,9 @@ void sendPropertyUpdate() {
 	twApi_AddPropertyToList(proplist,"LanRx",twPrimitive_CreateFromNumber(properties.LanRx), 0);
 	twApi_AddPropertyToList(proplist,"Temperature",twPrimitive_CreateFromNumber(properties.Temperature), 0);
 	twApi_AddPropertyToList(proplist,"Voltage",twPrimitive_CreateFromNumber(properties.Voltage), 0);
+	twApi_AddPropertyToList(proplist,"SerialStr",twPrimitive_CreateFromString(properties.SerialStr, TRUE), 0);
+	twApi_AddPropertyToList(proplist,"SerialTemp",twPrimitive_CreateFromNumber(properties.SerialTemp), 0);	
+	twApi_AddPropertyToList(proplist,"GpioIn",twPrimitive_CreateFromNumber(properties.GpioIn), 0);
 	twApi_PushProperties(TW_THING, thingName, proplist, -1, FALSE);
 	twApi_DeletePropertyList(proplist);
 }
@@ -171,6 +225,26 @@ void dataCollectionTask(DATETIME now, void * params) {
 	}
 	pclose(f);
 
+	/* Get the value on Gpio In 1 */
+	properties.GpioIn = (double) gpio_get_bin0();
+	printf("Value on GpioIn: %lf\n", properties.GpioIn);
+
+	/* Get the value on the serial line */
+	int fd_com;
+
+	module_cfg_t cfg;
+	module_cfg_load( &cfg );
+
+	fd_com = com_open(cfg.device, cfg.baudrate, cfg.databits, cfg.parity, cfg.stopbits);
+
+	char *buf;
+	buf = read_serial(fd_com);
+
+	close(fd_com);
+
+	properties.SerialStr = buf;
+	sscanf(buf, "%lf", &properties.SerialTemp);
+
 	/* Update the properties on the server */
 	sendPropertyUpdate();
 }
@@ -195,9 +269,10 @@ enum msgCodeEnum propertyHandler(const char * entityName, const char * propertyN
 			if (strcmp(propertyName, "LanTx") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.LanTx); 
 			else if (strcmp(propertyName, "LanRx") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.LanRx); 
 			else if (strcmp(propertyName, "Temperature") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.Temperature); 
-			else if (strcmp(propertyName, "Voltage") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.Voltage);  
-			// else if (strcmp(propertyName, "Location") == 0) *value = twInfoTable_CreateFromLocation(propertyName, &properties.Location); 
-			// else if (strcmp(propertyName, "BigGiantString") == 0) *value = twInfoTable_CreateFromString(propertyName, properties.BigGiantString, TRUE);
+			else if (strcmp(propertyName, "Voltage") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.Voltage);
+			else if (strcmp(propertyName, "SerialTemp") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.SerialTemp);
+			else if (strcmp(propertyName, "GpioIn") == 0) *value = twInfoTable_CreateFromNumber(propertyName, properties.GpioIn);
+			else if (strcmp(propertyName, "SerialStr") == 0) *value = twInfoTable_CreateFromString(propertyName, properties.SerialStr, TRUE);
 			else return TWX_NOT_FOUND;
 		}
 		return TWX_SUCCESS;
@@ -211,21 +286,25 @@ enum msgCodeEnum propertyHandler(const char * entityName, const char * propertyN
 Service Callbacks 
 ******************/
 /* Example of handling a single service in a callback */
-// enum msgCodeEnum addNumbersService(const char * entityName, const char * serviceName, twInfoTable * params, twInfoTable ** content, void * userdata) {
-// 	double a, b, res;
-// 	TW_LOG(TW_TRACE,"addNumbersService - Function called");
-// 	if (!params || !content) {
-// 		TW_LOG(TW_ERROR,"addNumbersService - NULL params or content pointer");
-// 		return TWX_BAD_REQUEST;
-// 	}
+enum msgCodeEnum setGpioService(const char * entityName, const char * serviceName, twInfoTable * params, twInfoTable ** content, void * userdata) {
+	TW_LOG(TW_TRACE,"setGpioService - Function called");
+	if (!params || !content) {
+		TW_LOG(TW_ERROR,"setGpioService - NULL params or content pointer");
+		return TWX_BAD_REQUEST;
+	}
 
-// 	twInfoTable_GetNumber(params, "a", 0, &a);
-// 	twInfoTable_GetNumber(params, "b", 0, &b);
-// 	res = a + b;
-// 	*content = twInfoTable_CreateFromNumber("result", res);
-// 	if (*content) return TWX_SUCCESS;
-// 	else return TWX_INTERNAL_SERVER_ERROR;
-// }
+	double value;
+	twInfoTable_GetNumber(params, "value", 0, &value);
+
+	if (value > 1)
+		value = 1;
+	else if (value < 0)
+		value = 0;
+
+	gpio_set_out0((int) value);
+
+	return TWX_SUCCESS;
+}
 
 // /* Example of handling multiple services in a callback */
 // enum msgCodeEnum multiServiceHandler(const char * entityName, const char * serviceName, twInfoTable * params, twInfoTable ** content, void * userdata) {
@@ -298,18 +377,17 @@ int main( int argc, char** argv ) {
 	twApi_SetSelfSignedOk();
 
 	/* Register our services */
-	// ds = twDataShape_Create(twDataShapeEntry_Create("a",NULL,TW_NUMBER));
-	// twDataShape_AddEntry(ds, twDataShapeEntry_Create("b",NULL,TW_NUMBER));
-	// twApi_RegisterService(TW_THING, thingName, "AddNumbers", NULL, ds, TW_NUMBER, NULL, addNumbersService, NULL);
-	// twApi_RegisterService(TW_THING, thingName, "GetBigString", NULL, NULL, TW_STRING, NULL, multiServiceHandler, NULL);
-	// twApi_RegisterService(TW_THING, thingName, "Shutdown", NULL, NULL, TW_NOTHING, NULL, multiServiceHandler, NULL);
+	ds = twDataShape_Create(twDataShapeEntry_Create("value",NULL,TW_NUMBER));
+	twApi_RegisterService(TW_THING, thingName, "SetGpio", NULL, ds, TW_NOTHING, NULL, setGpioService, NULL);
 
 	/* Regsiter our properties */
 	twApi_RegisterProperty(TW_THING, thingName, "LanTx", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
 	twApi_RegisterProperty(TW_THING, thingName, "LanRx", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
 	twApi_RegisterProperty(TW_THING, thingName, "Temperature", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
 	twApi_RegisterProperty(TW_THING, thingName, "Voltage", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
-	// twApi_RegisterProperty(TW_THING, thingName, "BigGiantString", TW_STRING, NULL, "ALWAYS", 0, propertyHandler, NULL);
+	twApi_RegisterProperty(TW_THING, thingName, "SerialTemp", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
+	twApi_RegisterProperty(TW_THING, thingName, "GpioIn", TW_NUMBER, NULL, "ALWAYS", 0, propertyHandler, NULL);
+	twApi_RegisterProperty(TW_THING, thingName, "SerialStr", TW_STRING, NULL, "ALWAYS", 0, propertyHandler, NULL);
 
 	/* Bind our thing */
 	twApi_BindThing(thingName);

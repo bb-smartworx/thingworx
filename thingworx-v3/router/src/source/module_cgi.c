@@ -41,6 +41,49 @@
 
 // **************************************************************************
 
+static const option_str_t DEVICE[] = {
+  { "PORT1", "/dev/ttyS0" },
+  { "PORT2", "/dev/ttyS1" },
+  { NULL   , NULL    }
+};
+
+// volby parametru "Baudrate"
+static const option_int_t BAUDRATE[] = {
+  { "300"   , 300    },
+  { "600"   , 600    },
+  { "1200"  , 1200   },
+  { "2400"  , 2400   },
+  { "4800"  , 4800   },
+  { "9600"  , 9600   },
+  { "19200" , 19200  },
+  { "38400" , 38400  },
+  { "57600" , 57600  },
+  { "115200", 115200 },
+  { NULL    , 0      }
+};
+
+// volby parametru "Data Bits"
+static const option_int_t DATABITS[] = {
+  { "8"  , 8 },
+  { "7"  , 7 },
+  { NULL , 0 }
+};
+
+// volby parametru "Parity"
+static const option_str_t PARITY[] = {
+  { "none", "N"  },
+  { "even", "E"  },
+  { "odd" , "O"  },
+  { NULL  , NULL }
+};
+
+// volby parametru "Stop Bits"
+static const option_int_t STOPBITS[] = {
+  { "1"  , 1 },
+  { "2"  , 2 },
+  { NULL , 0 }
+};
+
 // JavaScript stranky
 const char *JAVASCRIPT_BEGIN =
   "function CheckForm() {\n"
@@ -65,7 +108,7 @@ const char *JAVASCRIPT_END =
 // hlavni funkce CGI skriptu index.cgi
 static void main_index(void)
 {
-  module_cfg_t          cfg;
+  module_cfg_t cfg;
 
   module_cfg_load(&cfg);
 
@@ -93,6 +136,25 @@ static void main_index(void)
 
   html_form_break();
 
+  html_table(2, 120);
+
+  html_text("Expansion Port");
+  html_select_str("device", cfg.device, DEVICE);
+
+  html_text("Baudrate");
+  html_select_int("baudrate", cfg.baudrate, BAUDRATE);
+
+  html_text("Data Bits");
+  html_select_int("databits", cfg.databits, DATABITS);
+
+  html_text("Parity");
+  html_select_str("parity", cfg.parity, PARITY);
+
+  html_text("Stop Bits");
+  html_select_int("stopbits", cfg.stopbits, STOPBITS);
+
+  html_form_break();
+
   html_table(1, 0);
 
   html_submit("button", "Apply");
@@ -114,11 +176,16 @@ static void main_set(void)
   html_page_begin(MODULE_TITLE);
 
   ok       = 0;
-  input_ok = cgi_query_ok()                        &&
-             cgi_get_bool("enabled", &cfg.enabled) &&
-             cgi_get_str ("addr"   , &cfg.addr, 1) &&
-             cgi_get_str ("name"   , &cfg.name, 1) &&
-             cgi_get_str ("key"    , &cfg.key,  1);
+  input_ok = cgi_query_ok()                           &&
+             cgi_get_bool("enabled" , &cfg.enabled  ) &&
+             cgi_get_str ("addr"    , &cfg.addr,   1) &&
+             cgi_get_str ("name"    , &cfg.name,   1) &&
+             cgi_get_str ("key"     , &cfg.key,    1) &&
+             cgi_get_str ("device"  , &cfg.device, 1) &&
+             cgi_get_int ("baudrate", &cfg.baudrate ) &&
+             cgi_get_int ("databits", &cfg.databits ) &&
+             cgi_get_str ("parity"  , &cfg.parity, 1) &&
+             cgi_get_int ("stopbits", &cfg.stopbits );
   if (input_ok) {
     if (module_cfg_save(&cfg)) {
       ok = !run(MODULE_INIT, "restart", NULL, 1);

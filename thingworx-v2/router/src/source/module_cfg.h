@@ -36,6 +36,11 @@ typedef struct {
   char                  *addr;
   char                  *name;
   char                  *key;
+  char                  *device;
+  unsigned int          baudrate;
+  unsigned int          databits;
+  char                  *parity;
+  unsigned int          stopbits;
 } module_cfg_t;
 
 // precteni konfigurace modulu

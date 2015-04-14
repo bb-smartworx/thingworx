@@ -1,0 +1,6 @@
+*.o
+module
+module_cgi
+module_cfg
+bin/
+obj/

@@ -40,11 +40,16 @@ void module_cfg_load(module_cfg_t *cfg_ptr)
 {
   FILE                  *file_ptr;
 
-  file_ptr         = cfg_open(MODULE_SETTINGS, "r");
-  cfg_ptr->enabled = cfg_get_int(file_ptr, MODULE_PREFIX "ENABLED");
-  cfg_ptr->addr    = cfg_get_str(file_ptr, MODULE_PREFIX "ADDR"   );
-  cfg_ptr->name    = cfg_get_str(file_ptr, MODULE_PREFIX "NAME"   );
-  cfg_ptr->key     = cfg_get_str(file_ptr, MODULE_PREFIX "KEY"    );
+  file_ptr          = cfg_open(MODULE_SETTINGS, "r");
+  cfg_ptr->enabled  = cfg_get_int(file_ptr, MODULE_PREFIX "ENABLED" );
+  cfg_ptr->addr     = cfg_get_str(file_ptr, MODULE_PREFIX "ADDR"    );
+  cfg_ptr->name     = cfg_get_str(file_ptr, MODULE_PREFIX "NAME"    );
+  cfg_ptr->key      = cfg_get_str(file_ptr, MODULE_PREFIX "KEY"     );
+  cfg_ptr->device   = cfg_get_str(file_ptr, MODULE_PREFIX "DEVICE"  );
+  cfg_ptr->baudrate = cfg_get_int(file_ptr, MODULE_PREFIX "BAUDRATE");
+  cfg_ptr->databits = cfg_get_int(file_ptr, MODULE_PREFIX "DATABITS");
+  cfg_ptr->parity   = cfg_get_str(file_ptr, MODULE_PREFIX "PARITY"  );
+  cfg_ptr->stopbits = cfg_get_int(file_ptr, MODULE_PREFIX "STOPBITS");
   cfg_close(file_ptr);
 }
 
@@ -55,10 +60,15 @@ int module_cfg_save(module_cfg_t *cfg_ptr)
   FILE                  *file_ptr;
 
   if ((file_ptr = cfg_open(MODULE_SETTINGS, "w"))) {
-    cfg_put_bool(file_ptr, MODULE_PREFIX "ENABLED", cfg_ptr->enabled);
-    cfg_put_str (file_ptr, MODULE_PREFIX "ADDR"   , cfg_ptr->addr   );
-    cfg_put_str (file_ptr, MODULE_PREFIX "NAME"   , cfg_ptr->name   );
-    cfg_put_str (file_ptr, MODULE_PREFIX "KEY"    , cfg_ptr->key    );
+    cfg_put_bool(file_ptr, MODULE_PREFIX "ENABLED" , cfg_ptr->enabled);
+    cfg_put_str (file_ptr, MODULE_PREFIX "ADDR"    , cfg_ptr->addr       );
+    cfg_put_str (file_ptr, MODULE_PREFIX "NAME"    , cfg_ptr->name       );
+    cfg_put_str (file_ptr, MODULE_PREFIX "KEY"     , cfg_ptr->key        );
+    cfg_put_str (file_ptr, MODULE_PREFIX "DEVICE"  , cfg_ptr->device     );
+    cfg_put_int (file_ptr, MODULE_PREFIX "BAUDRATE", cfg_ptr->baudrate, 1);
+    cfg_put_int (file_ptr, MODULE_PREFIX "DATABITS", cfg_ptr->databits, 1);
+    cfg_put_str (file_ptr, MODULE_PREFIX "PARITY"  , cfg_ptr->parity     );
+    cfg_put_int (file_ptr, MODULE_PREFIX "STOPBITS", cfg_ptr->stopbits, 1);
     cfg_close(file_ptr);
     return 1;
   }
