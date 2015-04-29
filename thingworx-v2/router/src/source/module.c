@@ -225,7 +225,7 @@ void dataCollectionTask(DATETIME now, void * params) {
 	}
 	pclose(f);
 
-	/* Get the value on Gpio In 1 */
+	/* Get the value on Gpio In 0 */
 	properties.GpioIn = (double) gpio_get_bin0();
 	printf("Value on GpioIn: %lf\n", properties.GpioIn);
 
